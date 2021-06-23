@@ -1,0 +1,1 @@
+# terraform-spotinst-azure-connect
