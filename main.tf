@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.13.1"
+  required_version = ">= 0.13.0"
   required_providers {
     azuread = {
       source = "hashicorp/azuread"
@@ -177,6 +177,7 @@ data "external" "account" {
   depends_on = [null_resource.account]
   program = [local.cmd, "get", "--name=${data.azurerm_subscription.current.display_name}"]
 }
+
 # Link the Role ARN to the Spot Account
 resource "null_resource" "account_association" {
   depends_on = [azurerm_role_assignment.spot]
