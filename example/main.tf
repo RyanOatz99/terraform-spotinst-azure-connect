@@ -7,7 +7,7 @@ locals {
 
 #Call the spot module to create a Spot account and link Azure
 module "spot_subscription_0" {
-  source = "../spot-azure-account"
+  source = "../"
   spot_token = local.spot_token
   tenant_id = local.tenant_id
   subscription_id = local.subscriptions[0]
@@ -18,7 +18,7 @@ output "spot_account_id_0" {
 
 #copy paste the following and incriment
 module "spot_subscription_1" {
-  source = "../spot-azure-account"
+  source = "../"
   spot_token = local.spot_token
   tenant_id = local.tenant_id
   subscription_id = local.subscriptions[1]
