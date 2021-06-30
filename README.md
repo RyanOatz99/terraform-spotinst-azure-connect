@@ -11,14 +11,12 @@ The module will aid in automatically connecting your Azure Subscription to Spot 
 # One or more subscriptions can be added. The following shows how to connect two subscriptions. To add additional duplicate the module and increment the array number for each subscription.
 locals {
   subscriptions = ["123456789-1111-2222-3333-123456789","123456789-1111-2222-3333-123456789"]
-  spot_token = "123456789123456789"
   tenant_id = "123456789-1111-2222-3333-abcd123456"
 }
 
 #Call the spot module to create a Spot account and link to the first Azure subscription
 module "spot_subscription_0" {
   source = "./spot-account-azure"
-  spot_token = local.spot_token
   tenant_id = local.tenant_id
   subscription_id = local.subscriptions[0]
 }
@@ -29,7 +27,6 @@ output "spot_account_id_0" {
 #Subscription 2 - copy paste the following and increment
 module "spot_subscription_1" {
   source = "./spot-account-azure"
-  spot_token = local.spot_token
   tenant_id = local.tenant_id
   subscription_id = local.subscriptions[1]
 }
