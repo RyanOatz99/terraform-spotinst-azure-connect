@@ -183,7 +183,7 @@ resource "null_resource" "account_association" {
   depends_on = [azurerm_role_assignment.spot]
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
-    command = "${local.cmd} set-cloud-credentials --account_id ${local.account_id} --token ${var.spot_token} --client_id ${azuread_application.spot.application_id} --client_secret ${random_string.value.result} --tenant_id ${data.azurerm_client_config.current.tenant_id} --subscription_id ${var.subscription_id}"
+    command = "${local.cmd} set-cloud-credentials --account_id ${local.account_id} --client_id ${azuread_application.spot.application_id} --client_secret ${random_string.value.result} --tenant_id ${data.azurerm_client_config.current.tenant_id} --subscription_id ${var.subscription_id}"
   }
 }
 

@@ -1,7 +1,6 @@
 import time
 import click
 import json
-import requests
 
 from spotinst_sdk2 import SpotinstSession
 
@@ -40,28 +39,22 @@ def delete(ctx, *args, **kwargs):
 
 @cli.command()
 @click.option('--account_id', type=str, required=True)
-@click.option('--token', type=str, required=True)
 @click.option('--client_id', type=str, required=True)
 @click.option('--client_secret', type=str, required=True)
 @click.option('--tenant_id', type=str, required=True)
 @click.option('--subscription_id', type=str, required=True)
 @click.pass_context
-def set_cloud_credentials(ctx, account_id, token, client_id, client_secret, tenant_id, subscription_id, *args, **kwargs):
+def set_cloud_credentials(account_id, client_id, client_secret, tenant_id, subscription_id):
     """Set Azure credentials to Spot Account"""
-    headers = {'Authorization': 'Bearer ' + token}
-    url = 'https://api.spotinst.io/azure/setup/credentials?accountId=' + account_id
-    data = {
-        "clientId": client_id,
-        "clientSecret": client_secret,
-        "tenantId": tenant_id,
-        "subscriptionId": subscription_id
-    }
-    r = requests.post(url, json=data, headers=headers)
-    if r.status_code == 200:
-        click.echo(r)
-    else:
-        click.echo("Failed")
-        click.echo(r.text)
+    session = SpotinstSession()
+    client = session.client("setup_azure")
+    client.account_id = account_id
+    azurecredentials = AzureCredentials(client_id, client_secret, tenant_id, subscription_id)
+    try:
+        response = client.set_credentials(azurecredentials)
+        print(json.dumps(response))
+    except:
+        print(json.dumps(response))
 
 
 @cli.command()
