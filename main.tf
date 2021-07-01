@@ -60,6 +60,10 @@ resource "azuread_application_password" "spot-credential" {
 
 resource "azurerm_role_definition" "spot" {
   name        = "Spot.io-custom-role-${data.azurerm_subscription.current.display_name}-${random_string.value.result}"
+  provisioner "local-exec" {
+    # Without this set-cloud-credentials fails
+    command = "sleep 5"
+  }
   scope       = data.azurerm_subscription.current.id
   description = "This is a custom role created via Terraform for Spot.io App"
 
