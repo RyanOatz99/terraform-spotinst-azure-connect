@@ -49,6 +49,7 @@ def set_cloud_credentials(account_id, client_id, client_secret, tenant_id, subsc
     session = SpotinstSession()
     client = session.client("setup_azure")
     client.account_id = account_id
+    print(account_id)
     azurecredentials = AzureCredentials(client_id, client_secret, tenant_id, subscription_id)
     try:
         response = client.set_credentials(azurecredentials)
