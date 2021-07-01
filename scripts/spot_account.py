@@ -44,12 +44,12 @@ def delete(ctx, *args, **kwargs):
 @click.option('--tenant_id', type=str, required=True)
 @click.option('--subscription_id', type=str, required=True)
 @click.pass_context
-def set_cloud_credentials(account_id, client_id, client_secret, tenant_id, subscription_id):
+def set_cloud_credentials(client_id, client_secret, tenant_id, subscription_id, **kwargs):
     """Set Azure credentials to Spot Account"""
     session = SpotinstSession()
     client = session.client("setup_azure")
-    client.account_id = account_id
-    print(account_id)
+    client.account_id = kwargs.get('account_id')
+    print(kwargs.get('account_id'))
     azurecredentials = AzureCredentials(client_id, client_secret, tenant_id, subscription_id)
     try:
         response = client.set_credentials(azurecredentials)
