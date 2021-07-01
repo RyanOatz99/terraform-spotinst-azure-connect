@@ -3,7 +3,7 @@ import click
 import json
 
 from spotinst_sdk2 import SpotinstSession
-
+from spotinst_sdk2.models.setup.azure import *
 
 @click.group()
 @click.pass_context
@@ -11,6 +11,7 @@ def cli(ctx, *args, **kwargs):
     ctx.obj = {}
     session = SpotinstSession()
     ctx.obj['client'] = session.client("admin")
+    ctx.obj['client2'] = session.client("setup_azure")
 
 
 @cli.command()
@@ -38,21 +39,20 @@ def delete(ctx, *args, **kwargs):
 
 
 @cli.command()
-@click.option('--account_id', type=str, required=True)
-@click.option('--client_id', type=str, required=True)
-@click.option('--client_secret', type=str, required=True)
-@click.option('--tenant_id', type=str, required=True)
-@click.option('--subscription_id', type=str, required=True)
+@click.option('--account-id', required=True)
+@click.option('--client-id', required=True)
+@click.option('--client-secret', required=True)
+@click.option('--tenant-id', required=True)
+@click.option('--subscription-id', required=True)
 @click.pass_context
-def set_cloud_credentials(**kwargs):
+def set_cloud_credentials(ctx, *args, **kwargs):
     """Set Azure credentials to Spot Account"""
-    session = SpotinstSession()
-    client = session.client("setup_azure")
-    client.account_id = kwargs.get('account_id')
-    print(kwargs.get('account_id'))
+    #session = SpotinstSession(account_id=kwargs.get('account_id'))
+    ctx.obj['client2'].account_id = kwargs.get('account_id')
+
     azurecredentials = AzureCredentials(kwargs.get('client_id'), kwargs.get('client_secret'), kwargs.get('tenant_id'), kwargs.get('subscription_id'))
     try:
-        response = client.set_credentials(azurecredentials)
+        response = ctx.obj['client2'].set_credentials(azurecredentials)
         print(json.dumps(response))
     except:
         print(json.dumps(response))
