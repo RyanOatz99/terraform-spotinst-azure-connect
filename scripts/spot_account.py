@@ -3,6 +3,7 @@ import click
 import json
 
 from spotinst_sdk2 import SpotinstSession
+from spotinst_sdk2.models.admin import *
 from spotinst_sdk2.models.setup.azure import *
 
 @click.group()
@@ -47,9 +48,7 @@ def delete(ctx, *args, **kwargs):
 @click.pass_context
 def set_cloud_credentials(ctx, *args, **kwargs):
     """Set Azure credentials to Spot Account"""
-    #session = SpotinstSession(account_id=kwargs.get('account_id'))
     ctx.obj['client2'].account_id = kwargs.get('account_id')
-
     azurecredentials = AzureCredentials(kwargs.get('client_id'), kwargs.get('client_secret'), kwargs.get('tenant_id'), kwargs.get('subscription_id'))
     try:
         response = ctx.obj['client2'].set_credentials(azurecredentials)
@@ -79,6 +78,7 @@ def get(ctx, *args, **kwargs):
     """Returns ONLY the first match"""
     time.sleep(5)
     result = ctx.obj['client'].get_accounts()
+
     if kwargs.get('filter'):
         k, v = kwargs.get('filter').split('=')
         result = [x for x in result if x[k] == v]
