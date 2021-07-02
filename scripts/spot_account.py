@@ -68,17 +68,11 @@ def set_cloud_credentials(ctx, *args, **kwargs):
     required=False,
     help='Return only the raw value of a single attribute'
 )
-@click.option(
-    '--name',
-    required=False,
-    help='Return the account ID for the matching account name'
-)
 @click.pass_context
 def get(ctx, *args, **kwargs):
     """Returns ONLY the first match"""
-    time.sleep(5)
+    ctx.obj['client'].account_id = kwargs.get('account_id')
     result = ctx.obj['client'].get_accounts()
-
     if kwargs.get('filter'):
         k, v = kwargs.get('filter').split('=')
         result = [x for x in result if x[k] == v]
@@ -88,11 +82,7 @@ def get(ctx, *args, **kwargs):
             click.echo(result)
     else:
         if result:
-            result = [x for x in result if x['name'] == kwargs.get('name')]
             click.echo(json.dumps(result[0]))
-        else:
-            fail = {"account_id": "failed"}
-            click.echo(json.dumps(fail))
 
 
 if __name__ == "__main__":

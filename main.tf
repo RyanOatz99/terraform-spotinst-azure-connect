@@ -179,7 +179,11 @@ resource "null_resource" "account" {
 # Retrieve the Spot Account Information
 data "external" "account" {
   depends_on = [null_resource.account]
-  program = [local.cmd, "get", "--name=${data.azurerm_subscription.current.display_name}"]
+  program = [
+    local.cmd,
+    "get",
+    "--filter=name=${data.azurerm_subscription.current.display_name}"
+  ]
 }
 
 # Link the Role ARN to the Spot Account
