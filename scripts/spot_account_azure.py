@@ -3,7 +3,6 @@ import click
 import json
 
 from spotinst_sdk2 import SpotinstSession
-from spotinst_sdk2.models.admin import *
 from spotinst_sdk2.models.setup.azure import *
 
 @click.group()

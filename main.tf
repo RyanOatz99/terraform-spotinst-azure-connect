@@ -24,7 +24,7 @@ provider "azuread" {
 
 ## Locals ##
 locals {
-  cmd = "${path.module}/scripts/spot-account"
+  cmd = "${path.module}/scripts/spot-account-azure"
   account_id = lookup(data.external.account.result,"account_id","Fail")
 }
 ###############
@@ -158,7 +158,7 @@ resource "azurerm_role_assignment" "spot" {
 # Call Spot API to create the Spot Account
 resource "null_resource" "account" {
   triggers = {
-    cmd = "${path.module}/scripts/spot-account"
+    cmd = "${path.module}/scripts/spot-account-azure"
     name = data.azurerm_subscription.current.display_name
   }
   provisioner "local-exec" {
