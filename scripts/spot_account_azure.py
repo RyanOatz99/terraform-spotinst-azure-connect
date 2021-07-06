@@ -75,7 +75,7 @@ def get(ctx, *args, **kwargs):
     if kwargs.get('filter'):
         k, v = kwargs.get('filter').split('=')
         result = [x for x in result if x[k] == v]
-        click.echo(result)
+        click.echo(json.dumps(result))
     if kwargs.get('attr'):
         if result:
             result = result[0].get(kwargs.get('attr'))
