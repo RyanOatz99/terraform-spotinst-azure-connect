@@ -55,7 +55,7 @@ resource "azuread_application_password" "spot-credential" {
   application_object_id = azuread_application.spot.id
   description           = "Spot.io Managed Password"
   value                 = random_string.value.result
-  end_date              = "2099-01-01T01:02:03Z"
+  end_date              = var.end_date
 }
 
 resource "azurerm_role_definition" "spot" {
@@ -69,6 +69,8 @@ resource "azurerm_role_definition" "spot" {
 
   permissions {
     actions = [
+      "Microsoft.Compute/availabilitySets/read",
+      "Microsoft.Compute/availabilitySets/vmSizes/read",
       "Microsoft.Compute/disks/read",
       "Microsoft.Compute/disks/write",
       "Microsoft.Compute/disks/delete",
@@ -82,11 +84,14 @@ resource "azurerm_role_definition" "spot" {
       "Microsoft.Compute/virtualMachineScaleSets/networkInterfaces/read",
       "Microsoft.Compute/virtualMachineScaleSets/publicIPAddresses/read",
       "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/extensions/read",
+      "Microsoft.ContainerService/managedClusters/read",
+      "Microsoft.ContainerService/managedClusters/agentPools/read",
       "Microsoft.Insights/MetricDefinitions/Read",
       "Microsoft.Insights/Metrics/Read",
       "Microsoft.Insights/AutoscaleSettings/Read",
       "Microsoft.Insights/AutoscaleSettings/providers/Microsoft.Insights/MetricDefinitions/Read",
       "Microsoft.ManagedIdentity/userAssignedIdentities/assign/action",
+      "Microsoft.ManagedIdentity/userAssignedIdentities/read",
       "Microsoft.ManagedIdentity/identities/read",
       "Microsoft.NetApp/netAppAccounts/read",
       "Microsoft.NetApp/netAppAccounts/write",
@@ -107,6 +112,8 @@ resource "azurerm_role_definition" "spot" {
       "Microsoft.Network/applicationGateways/read",
       "Microsoft.Network/applicationGateways/backendhealth/action",
       "Microsoft.Network/applicationGateways/backendAddressPools/join/action",
+      "Microsoft.Network/applicationSecurityGroups/joinIpConfiguration/action",
+      "Microsoft.Network/applicationSecurityGroups/read",
       "Microsoft.Network/dnsZones/read",
       "Microsoft.Network/dnsZones/A/read",
       "Microsoft.Network/dnsZones/write",
@@ -127,6 +134,7 @@ resource "azurerm_role_definition" "spot" {
       "Microsoft.Network/publicIPAddresses/write",
       "Microsoft.Network/publicIPAddresses/delete",
       "Microsoft.Network/publicIPAddresses/join/action",
+      "Microsoft.Network/routeTables/read",
       "Microsoft.Network/virtualNetworks/read",
       "Microsoft.Network/virtualNetworks/subnets/join/action",
       "Microsoft.Network/virtualNetworks/subnets/read",
