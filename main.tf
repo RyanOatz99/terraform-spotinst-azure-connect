@@ -1,53 +1,9 @@
-terraform {
-  required_version = ">= 0.13.0"
-  required_providers {
-    azuread = {
-      source = "hashicorp/azuread"
-      version = "<2.0.0"
-    }
-    azurerm = {
-      source = "hashicorp/azurerm"
-    }
-  }
-}
-
-## Providers ##
-# Configure the Azure Provider
-provider "azurerm" {
-  subscription_id = var.subscription_id
-  features {}
-}
-provider "azuread" {
-  tenant_id = var.tenant_id
-}
-###############
-
-## Locals ##
-locals {
-  cmd = "${path.module}/scripts/spot-account-azure"
-  account_id = lookup(data.external.account.result,"account_id","Fail")
-}
-###############
-
-## Data Resources ##
-data "azurerm_subscription" "current" {}
-data "azurerm_client_config" "current" {}
-###############
-
-## Resources ##
-# Create a random string for the azure app registration
-resource "random_string" "value" {
-  length = 24
-  special = false
-}
-
 resource "azuread_application" "spot" {
   name                        = "Spot.io-${data.azurerm_subscription.current.display_name}"
   available_to_other_tenants  = false
   oauth2_permissions          = []
   reply_urls                  = ["https://spot.io"]
   type                        = "webapp/api"
-
 }
 
 resource "azuread_application_password" "spot-credential" {
@@ -110,15 +66,6 @@ resource "null_resource" "account" {
   }
 }
 
-# Retrieve the Spot Account Information
-data "external" "account" {
-  depends_on = [null_resource.account]
-  program = [
-    local.cmd,
-    "get",
-    "--filter=name=${data.azurerm_subscription.current.display_name}"
-  ]
-}
 
 # Link the Role ARN to the Spot Account
 resource "null_resource" "account_association" {
