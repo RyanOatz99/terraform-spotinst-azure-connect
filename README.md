@@ -21,7 +21,7 @@ module "azure-connect" {
   source  = "stevenfeltner/azure-connect/spotinst"
 }
 output "spot_account_id" {
-  value = module.spot_subscription.spot_account_id
+  value = module.azure-connect.spot_account_id
 }
 ```
 
