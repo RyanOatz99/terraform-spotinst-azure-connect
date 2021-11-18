@@ -1,16 +1,13 @@
 resource "azuread_application" "spot" {
-  name                        = "Spot.io-${data.azurerm_subscription.current.display_name}"
-  available_to_other_tenants  = false
-  oauth2_permissions          = []
-  reply_urls                  = ["https://spot.io"]
-  type                        = "webapp/api"
+  display_name                = "Spot.io-${data.azurerm_subscription.current.display_name}"
+  web {
+    homepage_url = "https://spot.io"
+  }
 }
 
 resource "azuread_application_password" "spot-credential" {
   depends_on            = [azuread_application.spot]
   application_object_id = azuread_application.spot.id
-  description           = "Spot.io Managed Password"
-  value                 = random_string.value.result
   end_date              = var.end_date
 }
 

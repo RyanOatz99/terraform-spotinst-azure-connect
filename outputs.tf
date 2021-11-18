@@ -5,7 +5,7 @@ output "subscription_id" {
   value = data.azurerm_subscription.current.subscription_id
 }
 output "client_secret" {
-  value = random_string.value.result
+  value = azuread_application_password.spot-credential.value
 }
 output "directory_id" {
   value = data.azurerm_client_config.current.tenant_id
